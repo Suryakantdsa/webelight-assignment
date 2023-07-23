@@ -21,7 +21,9 @@ export default function Accordions() {
 
   const repos = useSelector((store) => store.repository.repo) || [];
 
+  // console.log(repos[0].updated_at);
   // console.log(repos);
+
   useEffect(() => {
     console.log("useEffect hook called");
      getDatafromApi()
@@ -94,6 +96,7 @@ export default function Accordions() {
             .fill("")
             .map((itm, id) => <ShimmerAccordion key={id} />))
         : repos.map((repo) => (
+         
             <Accordion
               expanded={expanded === `${repo.owner.login}`}
               onChange={handleChange(`${repo.owner.login}`)}
@@ -129,14 +132,15 @@ export default function Accordions() {
                     desc={repo.description}
                     star={repo.stargazers_count}
                     issue={repo.open_issues_count}
-                    update={repo?.update_at}
+                    update={repo.update_at}
+                    repo={repo}
                   />
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key={repo._id}>
                 
                 <Typography sx={{ minHeight: "350px", padding: "10px" }}>
-                  {isLoding?<h1 >Loding....</h1>:<GraphPlot
+                  {isLoding?<h1>Loding....</h1>:<GraphPlot
                     key={repo._id}
                     name={repo.name}
                     owner={repo.owner.login}
