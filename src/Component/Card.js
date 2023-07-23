@@ -3,7 +3,6 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import BugReportIcon from '@mui/icons-material/BugReport';
 
 const Card = ({ name, url, desc, owner, star, issue ,repo}) => {
-  // console.log(repo)
   return (
     <div className="flex flex-col md:flex-row m-4 p-4 w-full ">
       <div className=" pl-16 md:pl-0 ">

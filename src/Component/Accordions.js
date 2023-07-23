@@ -14,23 +14,18 @@ import { addGraphData, removeGraphData } from "../utils/Store/Slice/graphSlice";
 
 export default function Accordions() {
   const [expanded, setExpanded] = useState(false);
-  const [isLoding ,setLoading]=useState(true)
-  const [isLodingpage ,setLoadingpage]=useState(true)
+  const [isLoding, setLoading] = useState(true);
+  const [isLodingpage, setLoadingpage] = useState(true);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
 
   const repos = useSelector((store) => store.repository.repo) || [];
-
-  // console.log(repos[0].updated_at);
-  // console.log(repos);
-
   useEffect(() => {
-    console.log("useEffect hook called");
-     getDatafromApi()
+    getDatafromApi();
   }, [page]);
-  const getDatafromApi=async()=>{
+  const getDatafromApi = async () => {
     try {
-      let data=await fetch(STARRED_REPO_API + `&page=${page}`);
+      let data = await fetch(STARRED_REPO_API + `&page=${page}`);
       data = await data.json();
       if (page === 1) {
         dispatch(addRepo(data.items));
@@ -39,9 +34,9 @@ export default function Accordions() {
       }
       setLoadingpage(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const handleScroll = () => {
     const scrolledToBottom =
       window.innerHeight + document.documentElement.scrollTop ===
@@ -52,8 +47,6 @@ export default function Accordions() {
       setPage((prevPage) => prevPage + 1);
     }
   };
-
-
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -61,47 +54,40 @@ export default function Accordions() {
     };
   }, [isLodingpage]);
 
-
-  const graphDataFromApi=async()=>{
+  const graphDataFromApi = async () => {
     try {
-      let data=await fetch("https://api.github.com/repos/octocat/hello-world/stats/code_frequency")
-      data=await data.json()
-      if(data){
-        dispatch(addGraphData(data))
-        setLoading(false)
+      let data = await fetch(
+        "https://api.github.com/repos/octocat/hello-world/stats/code_frequency"
+      );
+      data = await data.json();
+      if (data) {
+        dispatch(addGraphData(data));
+        setLoading(false);
       }
-    } catch (error) {
-      
-    }
-  }
-
+    } catch (error) {}
+  };
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-    if(isExpanded){
-      console.log("cliked")
-      dispatch(removeGraphData())
-      graphDataFromApi()
-      
-    }
-    else{
-      setLoading(true)
+    if (isExpanded) {
+      dispatch(removeGraphData());
+      graphDataFromApi();
+    } else {
+      setLoading(true);
     }
   };
 
   return (
     <div>
       {repos.length === 0
-        ? (Array(30)
+        ? Array(30)
             .fill("")
-            .map((itm, id) => <ShimmerAccordion key={id} />))
+            .map((itm, id) => <ShimmerAccordion key={id} />)
         : repos.map((repo) => (
-         
             <Accordion
               expanded={expanded === `${repo.owner.login}`}
               onChange={handleChange(`${repo.owner.login}`)}
-              
-              key={repo._id} 
+              key={repo._id}
             >
               <AccordionSummary
                 style={{
@@ -125,7 +111,7 @@ export default function Accordions() {
               >
                 <Typography sx={{ width: "100%", flexShrink: 0 }}>
                   <Card
-                    key={repo._id} 
+                    key={repo._id}
                     name={repo.name}
                     url={repo.owner.avatar_url}
                     owner={repo.owner.login}
@@ -138,18 +124,20 @@ export default function Accordions() {
                 </Typography>
               </AccordionSummary>
               <AccordionDetails key={repo._id}>
-                
                 <Typography sx={{ minHeight: "350px", padding: "10px" }}>
-                  {isLoding?<h1>Loding....</h1>:<GraphPlot
-                    key={repo._id}
-                    name={repo.name}
-                    owner={repo.owner.login}
-                  />}
+                  {isLoding ? (
+                    <h1>Loding....</h1>
+                  ) : (
+                    <GraphPlot
+                      key={repo._id}
+                      name={repo.name}
+                      owner={repo.owner.login}
+                    />
+                  )}
                 </Typography>
               </AccordionDetails>
             </Accordion>
           ))}
-          {isLodingpage && <ShimmerAccordion/>}
     </div>
   );
 }

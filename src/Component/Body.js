@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar from './Navbar'
 import Accordions from './Accordions'
-// import GitHubRepoList from './GitHubRepoList'
 import Card from './Card'
 import ShimmerAccordion from './ShimmerAccordion'
 
@@ -11,8 +10,6 @@ const Body = () => {
         <Navbar/>
         <Accordions/>
         <ShimmerAccordion/>
-        {/* <GitHubRepoList/> */}
-        {/* <Card/> */}
     </div>
   )
 }
